@@ -91,9 +91,19 @@ hemispheres = ['Cerberus', 'Schiaparelli', 'Syrtis Major', 'Valles']
         h_names.append(tempname[0].text)
 
 def scrape_all():
-    scrape_news()
-    scrape_weather()
-    scrape_featured_image()
-    scrape_facts()
-    scrape_hemispheres()
+    news = scrape_news()
+    weather = scrape_weather()
+    image = scrape_featured_image()
+    facts = scrape_facts()
+    hemispheres = scrape_hemispheres()
+    
+    mars_data = {"News" : news, 
+                       "Weather" : weather,
+                       "Featured Image" : image,
+                       "Fact Table" : facts,
+                       "Hemispheres" : hemispheres}
+    
+    return mars_data
+    
+    
     
