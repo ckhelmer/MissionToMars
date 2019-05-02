@@ -75,8 +75,7 @@ def scrape_hemispheres():
     browser = init_browser()
     
     url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
-hemispheres = ['Cerberus', 'Schiaparelli', 'Syrtis Major', 'Valles']
-
+    hemispheres = ['Cerberus', 'Schiaparelli', 'Syrtis Major', 'Valles']
     h_names = []
     h_urls = []
 
@@ -89,6 +88,10 @@ hemispheres = ['Cerberus', 'Schiaparelli', 'Syrtis Major', 'Valles']
         tempurl = soup.find_all('li')
         h_urls.append(tempurl[0].a['href'])
         h_names.append(tempname[0].text)
+        
+    #Make into dictionary
+    hemisphere_dict = {"names" : h_names,
+                       "pix" : h_urls,}
 
 def scrape_all():
     news = scrape_news()
@@ -97,11 +100,11 @@ def scrape_all():
     facts = scrape_facts()
     hemispheres = scrape_hemispheres()
     
-    mars_data = {"News" : news, 
-                       "Weather" : weather,
-                       "Featured Image" : image,
-                       "Fact Table" : facts,
-                       "Hemispheres" : hemispheres}
+    mars_data = {"news" : news, 
+                       "weather" : weather,
+                       "featured_image" : image,
+                       "fact_table" : facts,
+                       "hemispheres" : hemispheres}
     
     return mars_data
     
