@@ -18,6 +18,11 @@ def scrape_news():
     soup = bs(response.text, 'lxml')
     a_titles = soup.find_all('div', class_ = 'content_title')
     a_text = soup.find_all('div', class_ = 'article_teaser_body')
+    a_title = a_titles[0].text.strip()
+    #a_body = a_text[0].text.strip()
+    
+    print("News Retrieved")
+    return a_titles, a_text
     
 def scrape_weather():
     
@@ -30,13 +35,13 @@ def scrape_weather():
     weather = soup.find_all('p')
     tweet = weather[4].text.strip()
     
-def init_browser():
-    executable_path = {'executable_path':'C:/Users/Caitlin/Desktop/cwrubootcamp/chromedriver.exe'}
-    browser = Browser('chrome', **executable_path, headless=True)
+    print("Weather Retrieved")
+    return tweet
     
 def scrape_featured_image():
-    #Navigate first page:
-    browser = init_browser()
+    #Navigate to first page
+    executable_path = {'executable_path':'C:/Users/Caitlin/Desktop/cwrubootcamp/chromedriver.exe'}
+    browser = Browser('chrome', **executable_path, headless=True)
     url = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
     browser.visit(url)
     browser.click_link_by_partial_text('FULL IMAGE')
@@ -57,6 +62,9 @@ def scrape_featured_image():
     link = links[1].a['href']
     image_link = "https://www.jpl.nasa.gov" + link[1:]
     
+    print("Featured Image Retrieved")
+    return image_link
+    
 def scrape_facts():
     #Bring table in via pandas
     url = 'https://space-facts.com/mars/'
@@ -71,8 +79,12 @@ def scrape_facts():
     mars_html = mars_df.to_html()
     mars_html.replace('\n', '')
     
+    print("Facts Retrieved")
+    return mars_html
+    
 def scrape_hemispheres():
-    browser = init_browser()
+    executable_path = {'executable_path':'C:/Users/Caitlin/Desktop/cwrubootcamp/chromedriver.exe'}
+    browser = Browser('chrome', **executable_path, headless=True)
     
     url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
     hemispheres = ['Cerberus', 'Schiaparelli', 'Syrtis Major', 'Valles']
@@ -89,9 +101,8 @@ def scrape_hemispheres():
         h_urls.append(tempurl[0].a['href'])
         h_names.append(tempname[0].text)
         
-    #Make into dictionary
-    hemisphere_dict = {"names" : h_names,
-                       "pix" : h_urls,}
+    print("Hemispheres Retrieved")
+    return h_urls, h_names
 
 def scrape_all():
     news = scrape_news()
@@ -100,6 +111,7 @@ def scrape_all():
     facts = scrape_facts()
     hemispheres = scrape_hemispheres()
     
+   
     mars_data = {"news" : news, 
                        "weather" : weather,
                        "featured_image" : image,
