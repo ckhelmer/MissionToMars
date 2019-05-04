@@ -32,7 +32,7 @@ def home():
 def scrape():
     
     mars_data = scrape_mars.scrape_all()
-    db.collection.update({}, mars_data, upsert =True)
+    db.mars_data.update({}, mars_data, upsert =True)
     
     #Redirect to homepage
     return redirect("/")

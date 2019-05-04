@@ -17,12 +17,17 @@ def scrape_news():
     #Parse and assign:
     soup = bs(response.text, 'lxml')
     a_titles = soup.find_all('div', class_ = 'content_title')
+    
+    #This element worked when I initially coded it. Now it returns an empty set. ¯\_(ツ)_/¯
     a_text = soup.find_all('div', class_ = 'article_teaser_body')
-    a_title = a_titles[0].text.strip()
-    #a_body = a_text[0].text.strip()
+    titles = []
+    for title in a_titles:
+        title = title.text.strip()
+        titles.append(title)
+    titles = titles[0]   
     
     print("News Retrieved")
-    return a_titles, a_text
+    return titles #a_text
     
 def scrape_weather():
     
@@ -60,7 +65,7 @@ def scrape_featured_image():
     soup = bs(html, 'lxml')
     links = soup.find_all('div', class_ = 'download_tiff')
     link = links[1].a['href']
-    image_link = "https://www.jpl.nasa.gov" + link[1:]
+    image_link = "https:" + link
     
     print("Featured Image Retrieved")
     return image_link
@@ -70,14 +75,13 @@ def scrape_facts():
     url = 'https://space-facts.com/mars/'
     mars_info = pd.read_html(url)
     
-    #Make it into a dataframe(I MAY CHANGE THIS BACK, I DON'T KNOW)
-    mars_df = pd.DataFrame.transpose(mars_info[0])
-    mars_df.columns = ['Equatorial Diameter', 'Polar Diameter', 'Mass', 'Moons', 'Orbit Distance', 'Orbit Period', 'Surface Temperature', 'First Record', 'Recorded By']
-    mars_df = mars_df.iloc[1:]
+    #Make it into a dataframe
+    mars_df = mars_info[0]
+    mars_df.columns = ["Type", "Value"]
     
     #Export as html
     mars_html = mars_df.to_html()
-    mars_html.replace('\n', '')
+    mars_html = mars_html.replace('\n', '')
     
     print("Facts Retrieved")
     return mars_html
